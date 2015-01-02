@@ -1,0 +1,24 @@
+---
+
+- name: Creating directories
+  file: path={{ elao_openssl_files_path|default('/etc/ssl') }}/{{ item }} state=directory owner=root group=root mode=0755
+  with_items:
+    - private
+    - certs
+  sudo: yes
+
+- name: Creating self-signed SSL certs
+  command: >
+    openssl req -new -nodes -x509 -extensions v3_ca
+    -subj "/CN={{ item.value.common_name }}
+    {%- if item.value.country is defined %}/C={{ item.value.country }}{% endif %}
+    {%- if item.value.organization_name is defined %}/O={{ item.value.organization_name }}{% endif %}
+    {%- if item.value.state is defined %}/ST={{ item.value.state }}{% endif %}
+    {%- if item.value.locality_name is defined %}/L={{ item.value.locality_name }}{% endif %}
+    {%- if item.value.unit_name is defined %}/OU={{ item.value.unit_name }}{% endif %}
+    {%- if item.value.email_address is defined %}emailAddress={{ item.value.email_address }}{% endif %}"
+    -days {{ item.value.ttl|default(3650) }}
+    -keyout {{ elao_openssl_keys_path }}/{{ item.key }}.key
+    -out {{ elao_openssl_certs_path }}/{{ item.key }}.crt
+  with_dict: elao_openssl_self_signed
+  sudo: yes

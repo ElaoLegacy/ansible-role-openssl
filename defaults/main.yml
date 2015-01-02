@@ -1,0 +1,7 @@
+---
+
+elao_openssl_files_path:    /etc/ssl-elao
+elao_openssl_keys_path:     "{{ elao_openssl_files_path }}/private"
+elao_openssl_certs_path:    "{{ elao_openssl_files_path }}/certs"
+
+elao_openssl_self_signed:   {}
