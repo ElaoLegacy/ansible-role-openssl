@@ -1,17 +1,16 @@
 ---
 
 - name: Creating directories
-  file: path={{ elao_openssl_files_path|default('/etc/ssl') }}/{{ item }} state=directory owner=root group=root mode=0755
+  file: path={{ item.name }} state=directory owner=root group=root mode={{ item.mode }}
   with_items:
-    - private
-    - certs
+    - { name: "{{ elao_openssl_keys_path }}", mode: "0710" }
+    - { name: "{{ elao_openssl_certs_path }}", mode: "0755" }
   sudo: yes
 
 - name: Creating self-signed SSL certs
   command: >
-    openssl req -x509
-    {% if item.value.out_format is defined %}-outform {{ item.value.out_format }}{% endif %}
-    {% if item.value.newkey is defined %}-newkey {{ item.value.newkey }}{% endif %}
+    openssl req -x509 
+    {% if item.value.extra_options is defined %}{{ item.value.extra_options }}{% endif %}
     -subj "/CN={{ item.value.common_name }}
     {%- if item.value.country is defined %}/C={{ item.value.country }}{% endif %}
     {%- if item.value.organization_name is defined %}/O={{ item.value.organization_name }}{% endif %}
@@ -21,6 +20,6 @@
     {%- if item.value.email_address is defined %}emailAddress={{ item.value.email_address }}{% endif %}"
     -keyout {{ elao_openssl_keys_path }}/{{ item.key }}.key
     -out {{ elao_openssl_certs_path }}/{{ item.key }}.crt
-    {% if item.value.extra_options is defined %}{{ item.value.extra_options }}{% endif %}
+  when: elao_openssl_self_signed is defined
   with_dict: elao_openssl_self_signed
   sudo: yes

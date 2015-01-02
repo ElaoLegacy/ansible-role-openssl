@@ -68,8 +68,7 @@ elao_openssl_self_signed:
         email_address:      hosting@elao.com
         ttl:                365
         passphrase:         MyAwesomePassword
-        out_format:         PEM
-        extra_options:      "-days 365"
+        extra_options:      "-days 365 -nodes -extensions v3_ca -outform PEM"
 
     pma:
         common_name:        "sql.mysite.local"
@@ -79,9 +78,8 @@ elao_openssl_self_signed:
         organization_name:  ELAO
         unit_name:          IT
         email_address:      hosting@elao.com
-        ttl:                365
         passphrase:         MyAwesomePassword
-        out_format:         PEM
+        extra_options:      "-days 365 -nodes -extensions v3_ca -outform PEM"
 ```
 
 ## Example playbook
