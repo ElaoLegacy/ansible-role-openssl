@@ -2,7 +2,7 @@
 
 This role will install OpenSSL on the spedified hosts and manage SSL certificates. It's able to deal with "real" certificates and keys as autosigned custom certificates
 
-It's part of the ELAO Ansible stack but can be used stand alone.
+It's part of the ELAO Ansible stack but can be used as a stand alone component.
 
 ## Requirements
 
@@ -32,6 +32,23 @@ dependencies:
 
 ## Role Variables
 
+### Definition
+
+|Name|Default|Description|
+|----|----|-----------|
+`common_name` *|None|Should match your fqdn.
+`state`|None|
+`locality_name`|None|
+`organization_name`|None|
+`organization_name`|None|
+`unit_name`|None|Organization Unit Name
+`email_address`|None|
+`ttl`|30 days|Specifies the number of days to make a certificate valid for.
+`passphrase`|None|If null
+`out_format`|None|Can be PEM, DER or NET
+
+(*) The field is mandatory
+
 ### Configuration example
 
 ```
@@ -49,9 +66,9 @@ elao_openssl_self_signed:
         organization_name:  ELAO
         unit_name:          IT                      # Organization Unit Name
         email_address:      hosting@elao.com
-        ttl:                365
+        ttl:                365                     # Corresponding to the -days option
         passphrase:         MyAwesomePassword
-
+        out_format:         PEM
     pma:
         common_name:        "sql.mysite.local"      # This one is mandatory and can't be null
         country:            FR                      # Country Name
