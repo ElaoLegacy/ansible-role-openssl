@@ -9,7 +9,9 @@
 
 - name: Creating self-signed SSL certs
   command: >
-    openssl req -new -nodes -x509 -extensions v3_ca
+    openssl req -x509
+    {% if item.value.out_format is defined %}-outform {{ item.value.out_format }}{% endif %}
+    {% if item.value.newkey is defined %}-newkey {{ item.value.newkey }}{% endif %}
     -subj "/CN={{ item.value.common_name }}
     {%- if item.value.country is defined %}/C={{ item.value.country }}{% endif %}
     {%- if item.value.organization_name is defined %}/O={{ item.value.organization_name }}{% endif %}
@@ -17,8 +19,8 @@
     {%- if item.value.locality_name is defined %}/L={{ item.value.locality_name }}{% endif %}
     {%- if item.value.unit_name is defined %}/OU={{ item.value.unit_name }}{% endif %}
     {%- if item.value.email_address is defined %}emailAddress={{ item.value.email_address }}{% endif %}"
-    -days {{ item.value.ttl|default(3650) }}
     -keyout {{ elao_openssl_keys_path }}/{{ item.key }}.key
     -out {{ elao_openssl_certs_path }}/{{ item.key }}.crt
+    {% if item.value.extra_options is defined %}{{ item.value.extra_options }}{% endif %}
   with_dict: elao_openssl_self_signed
   sudo: yes

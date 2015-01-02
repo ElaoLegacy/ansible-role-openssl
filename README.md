@@ -40,12 +40,12 @@ dependencies:
 `state`|None|
 `locality_name`|None|
 `organization_name`|None|
-`organization_name`|None|
 `unit_name`|None|Organization Unit Name
 `email_address`|None|
-`ttl`|30 days|Specifies the number of days to make a certificate valid for.
 `passphrase`|None|If null
 `out_format`|None|Can be PEM, DER or NET
+`newkey`|None|The certificate request will be generated with a new key pair. Could be rsa:length or dsa:filename. Example: rsa:2048
+`extra_options`|None|Could be any of the options supported by openssl. See [https://www.openssl.org/docs/apps/x509.html](https://www.openssl.org/docs/apps/x509.html) for further informations.
 
 (*) The field is mandatory
 
@@ -60,25 +60,28 @@ elao_openssl_certs_path:    "{{ elao_openssl_files_path }}/certs"
 
 elao_openssl_self_signed:
     global:
-        common_name:        "*.mysite.local"        # This one is mandatory and can't be null
+        common_name:        "*.mysite.local"
         state:              "Rhône-Alpes"
         locality_name:      LYON
         organization_name:  ELAO
-        unit_name:          IT                      # Organization Unit Name
+        unit_name:          IT
         email_address:      hosting@elao.com
-        ttl:                365                     # Corresponding to the -days option
+        ttl:                365
         passphrase:         MyAwesomePassword
         out_format:         PEM
+        extra_options:      "-days 365"
+
     pma:
-        common_name:        "sql.mysite.local"      # This one is mandatory and can't be null
-        country:            FR                      # Country Name
+        common_name:        "sql.mysite.local"
+        country:            FR
         state:              "Rhône-Alpes"
         locality_name:      LYON
         organization_name:  ELAO
-        unit_name:          IT                      # Organization Unit Name
+        unit_name:          IT
         email_address:      hosting@elao.com
-        ttl:                365                     # Corresponding to the -days option
+        ttl:                365
         passphrase:         MyAwesomePassword
+        out_format:         PEM
 ```
 
 ## Example playbook
