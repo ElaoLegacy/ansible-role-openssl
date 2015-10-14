@@ -1,3 +1,13 @@
+WARNING: This role is no longer maintained !!!
+==============================================
+
+You are strongly encouraged to switch to the new roles stack on https://github.com/ElaoInfra
+--------------------------------------------------------------------------------------------
+
+By the way, this role will remain available on https://github.com/ElaoLegacy
+----------------------------------------------------------------------------
+
+
 # Ansible Role: OpenSSL
 
 This role will install OpenSSL on the spedified hosts and manage SSL certificates. It's able to deal with "real" certificates and keys as autosigned custom certificates
